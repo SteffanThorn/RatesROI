@@ -1,7 +1,7 @@
 {
-  "name": "CivicEchoNZ",
-  "short_name": "CivicEchoNZ",
-  "description": "Better civic information than the government. NZ-focused, 100% apolitical.",
+  "name": "Fair Say NZ",
+  "short_name": "FairSayNZ",
+  "description": "Fair Say NZ: 100% neutral, NZ-focused civic platform. News, party info, MP contacts, polls and real ways to have your say.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#080f1e",

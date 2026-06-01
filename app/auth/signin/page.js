@@ -23,7 +23,7 @@ export default function SignInPage({ searchParams }) {
   return (
     <main className="mx-auto flex min-h-screen max-w-md items-center px-6 py-16">
       <form action={authenticate} className="card w-full rounded-3xl p-8">
-        <p className="text-xs uppercase tracking-widest text-emerald-400 mb-2">CivicEchoNZ</p>
+        <p className="text-xs uppercase tracking-widest text-emerald-400 mb-2">Fair Say NZ</p>
         <h1 className="text-3xl font-semibold">Sign in</h1>
         <p className="mt-2 text-sm text-slate-300">Access your civic account.</p>
         {created ? <p className="mt-3 text-sm text-emerald-300">Account created. Please sign in.</p> : null}

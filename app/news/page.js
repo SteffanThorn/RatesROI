@@ -92,7 +92,20 @@ function ArticleSkeleton() {
 }
 
 async function NewsFeed() {
-  const articles = await getNZNews({ limit: 24 });
+  let articles = [];
+  try {
+    articles = await getNZNews({ limit: 24 });
+  } catch {
+    return (
+      <div className="card rounded-2xl p-8 text-center">
+        <p className="text-2xl mb-2">🔌</p>
+        <p className="font-semibold text-white">Database not connected</p>
+        <p className="mt-1 text-sm text-slate-400">
+          Add a valid <code className="text-emerald-400">MONGODB_URI</code> to your <code className="text-emerald-400">.env.local</code> to enable the news feed.
+        </p>
+      </div>
+    );
+  }
 
   if (!articles.length) {
     return (
@@ -122,7 +135,7 @@ export default function NewsPage() {
       <header className="mb-8">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <p className="text-xs uppercase tracking-widest text-emerald-400 mb-1">CivicEchoNZ</p>
+            <p className="text-xs uppercase tracking-widest text-emerald-400 mb-1">Fair Say NZ</p>
             <h1 className="text-3xl font-bold text-white sm:text-4xl">
               📰 Grounded News
             </h1>
@@ -136,7 +149,7 @@ export default function NewsPage() {
         {/* Disclaimer */}
         <div className="mt-5 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3">
           <p className="text-xs text-amber-200 leading-relaxed">
-            <strong>ℹ️ About these articles:</strong> CivicEchoNZ aggregates headlines from independent NZ news sources.
+            <strong>ℹ️ About these articles:</strong> Fair Say NZ aggregates headlines from independent NZ news sources.
             We do not write, edit, or endorse any article. We do not affiliate with any political party.
             Source attribution is shown on every card.
           </p>

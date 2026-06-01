@@ -2,7 +2,7 @@
 /**
  * scripts/seed-data.js
  *
- * Seeds the database with initial CivicEchoNZ data:
+ * Seeds the database with initial Fair Say NZ data:
  *   - 7 NZ parliamentary parties (as at 2026)
  *   - Starter civic content pages
  *
@@ -346,7 +346,7 @@ If a party wins more electorate seats than their party vote entitles them to, Pa
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(`\n🌿 CivicEchoNZ seed script ${DRY_RUN ? '(DRY RUN)' : ''}\n`);
+  console.log(`\n🌿 Fair Say NZ seed script ${DRY_RUN ? '(DRY RUN)' : ''}\n`);
 
   if (!DRY_RUN) {
     await mongoose.connect(MONGODB_URI, { bufferCommands: false });

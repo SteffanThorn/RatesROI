@@ -103,7 +103,7 @@ export default async function MPProfilePage({ params }) {
 
       <section className="mt-6 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-5 py-4">
         <p className="text-xs text-amber-200 leading-relaxed">
-          CivicEchoNZ provides neutral profile data for civic education. Verify details via official Parliament and party websites.
+          Fair Say NZ provides neutral profile data for civic education. Verify details via official Parliament and party websites.
         </p>
       </section>
     </main>

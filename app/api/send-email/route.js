@@ -9,22 +9,22 @@ function formatCurrency(amount) {
 const BASE_STYLE = `font-family: system-ui, Arial, sans-serif; line-height: 1.65; color: #0f172a; max-width: 580px; margin: 0 auto;`;
 const FOOTER = `<hr style="margin:32px 0;border:none;border-top:1px solid #e2e8f0"/>
   <p style="font-size:12px;color:#64748b">
-    CivicEchoNZ — 100% apolitical civic education for New Zealanders.<br>
+    Fair Say NZ — 100% neutral civic platform for New Zealanders.<br>
     We never endorse any party, candidate, or ideology.
   </p>`;
 
 function getHtml(emailType, data) {
   if (emailType === 'welcome') {
     return `<div style="${BASE_STYLE}">
-      <h1 style="color:#065f46">Welcome to CivicEchoNZ, ${data.name || 'there'}! 🌿</h1>
+      <h1 style="color:#065f46">Welcome to Fair Say NZ, ${data.name || 'there'}! 🌿</h1>
       <p>You now have access to:</p>
       <ul>
         <li>📰 <strong>Grounded News</strong> — NZ politics from multiple neutral sources</li>
-        <li>🗳️ <strong>Parties & MPs</strong> — factual, apolitical profiles</li>
+        <li>🗳️ <strong>Parties & MPs</strong> — factual, neutral profiles</li>
         <li>📚 <strong>Civics</strong> — how NZ government really works</li>
         <li>📊 <strong>Polls & Pairwise</strong> — anonymous community voice</li>
       </ul>
-      <p><a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}" style="color:#059669">Explore CivicEchoNZ →</a></p>
+      <p><a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}" style="color:#059669">Explore Fair Say NZ →</a></p>
       ${FOOTER}
     </div>`;
   }
@@ -35,14 +35,14 @@ function getHtml(emailType, data) {
       <p>Hi ${data.name || 'there'},</p>
       <p>Your payment for <strong>${data.itemName}</strong> was successful.</p>
       <p>Total: <strong>${formatCurrency(data.amount)}</strong></p>
-      <p>Thank you for supporting CivicEchoNZ.</p>
+      <p>Thank you for supporting Fair Say NZ.</p>
       ${FOOTER}
     </div>`;
   }
 
   if (emailType === 'newsletter') {
     return `<div style="${BASE_STYLE}">
-      <h1 style="color:#065f46">🌿 CivicEchoNZ — Objective Truth Edition</h1>
+      <h1 style="color:#065f46">🌿 Fair Say NZ — Objective Truth Edition</h1>
       <p>${data.intro || 'This week in NZ civic life:'}</p>
       ${data.body || ''}
       <p style="margin-top:24px"><a href="${data.unsubscribeUrl || '#'}" style="color:#64748b;font-size:12px">Unsubscribe</a></p>
@@ -74,14 +74,14 @@ export async function POST(request) {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
     const subjectMap = {
-      'welcome': `Welcome to CivicEchoNZ, ${data?.name || 'there'}!`,
-      'order-confirmation': 'CivicEchoNZ — Payment confirmed',
-      'newsletter': data?.subject || 'CivicEchoNZ — Objective Truth Edition',
+      'welcome': `Welcome to Fair Say NZ, ${data?.name || 'there'}!`,
+      'order-confirmation': 'Fair Say NZ — Payment confirmed',
+      'newsletter': data?.subject || 'Fair Say NZ — Objective Truth Edition',
     };
-    const subject = subjectMap[emailType] || 'CivicEchoNZ notification';
+    const subject = subjectMap[emailType] || 'Fair Say NZ notification';
 
     const result = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'CivicEchoNZ <noreply@civicechonz.nz>',
+      from: process.env.EMAIL_FROM || 'Fair Say NZ <noreply@fairsaynz.nz>',
       to,
       subject,
       html: getHtml(emailType, data || {}),

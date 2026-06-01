@@ -27,7 +27,7 @@ export default async function DashboardPage() {
     <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-widest text-emerald-400">CivicEchoNZ</p>
+          <p className="text-xs uppercase tracking-widest text-emerald-400">Fair Say NZ</p>
           <h1 className="mt-1 text-2xl font-bold text-white">My Account</h1>
           <p className="mt-1 text-sm text-slate-400">{session.user.email}</p>
         </div>
@@ -57,7 +57,7 @@ export default async function DashboardPage() {
       </section>
 
       <section>
-        <h2 className="mb-4 font-semibold text-white">Explore CivicEchoNZ</h2>
+        <h2 className="mb-4 font-semibold text-white">Explore Fair Say NZ</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {CIVIC_LINKS.map((link) => (
             <Link

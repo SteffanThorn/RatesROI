@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { getNZNews } from '@/lib/newsCache';
 
 export const metadata = {
-  title: 'CivicEchoNZ — Better civic information',
+  title: 'Fair Say NZ — Everyone gets a fair say.',
 };
 
 export const revalidate = 600;
@@ -70,12 +70,12 @@ export default function HomePage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-12">
       <section className="card mb-8 rounded-3xl p-7 sm:p-10">
-        <p className="text-xs uppercase tracking-widest text-emerald-400">CivicEchoNZ</p>
+        <p className="text-xs uppercase tracking-widest text-emerald-400">Fair Say NZ</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-          Better information<br className="hidden sm:block" /> than the government.
+          Everyone gets<br className="hidden sm:block" /> a fair say.
         </h1>
         <p className="mt-4 max-w-2xl leading-relaxed text-slate-300">
-          Education + real ways to have your say. 100% apolitical, NZ-focused, neutral sources only.
+          Education + real ways to have your say. 100% neutral, NZ-focused, neutral sources only.
           No party affiliation. No spin.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">

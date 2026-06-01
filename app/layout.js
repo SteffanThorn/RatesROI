@@ -4,17 +4,17 @@ import Sidebar from '@/components/Sidebar';
 
 export const metadata = {
   title: {
-    default: 'CivicEchoNZ — Better civic information',
-    template: '%s | CivicEchoNZ',
+    default: 'Fair Say NZ — Everyone gets a fair say.',
+    template: '%s | Fair Say NZ',
   },
   description:
-    'CivicEchoNZ: 100% apolitical, NZ-focused civic education and engagement. Grounded News, party info, MP contacts, polls and real ways to have your say.',
+    'Fair Say NZ: 100% neutral, NZ-focused civic platform. News, party info, MP contacts, polls and real ways to have your say.',
   keywords: ['New Zealand', 'civics', 'parliament', 'election 2026', 'NZ politics', 'civic education'],
   themeColor: '#080f1e',
   manifest: '/manifest.json',
   openGraph: {
-    title: 'CivicEchoNZ',
-    description: 'Better information than the government. Education + real ways to have your say.',
+    title: 'Fair Say NZ',
+    description: 'Fair Say NZ: 100% neutral, NZ-focused civic platform. News, party info, MP contacts, polls and real ways to have your say.',
     locale: 'en_NZ',
     type: 'website',
   },

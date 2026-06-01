@@ -37,7 +37,7 @@ export default function SignUpPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md items-center px-6 py-16">
       <form onSubmit={handleSubmit} className="card w-full rounded-3xl p-8">
-        <p className="text-xs uppercase tracking-widest text-emerald-400 mb-2">CivicEchoNZ</p>
+        <p className="text-xs uppercase tracking-widest text-emerald-400 mb-2">Fair Say NZ</p>
         <h1 className="text-3xl font-semibold">Create account</h1>
         <p className="mt-2 text-sm text-slate-300">Join thousands of NZers getting better civic info.</p>
         <div className="mt-6 space-y-4">

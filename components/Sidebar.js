@@ -97,14 +97,14 @@ export default function Sidebar({ session }) {
         <div className="flex items-center gap-2 border-b border-white/8 px-5 py-4">
           <span className="text-xl">🌿</span>
           <div>
-            <p className="text-sm font-bold tracking-wide text-white">CivicEchoNZ</p>
+            <p className="text-sm font-bold tracking-wide text-white">Fair Say NZ</p>
             <p className="text-[10px] text-slate-400 leading-tight">Better civic info</p>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">{navContent}</div>
         <div className="border-t border-white/8 px-5 py-3">
           <p className="text-[10px] text-slate-500 leading-relaxed">
-            100% apolitical · neutral · NZ-focused
+            Everyone gets a fair say. · NZ-focused
           </p>
         </div>
       </aside>
@@ -113,7 +113,7 @@ export default function Sidebar({ session }) {
       <header className="md:hidden fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between border-b border-white/8 bg-[#080f1e]/95 px-4 backdrop-blur">
         <div className="flex items-center gap-2">
           <span className="text-lg">🌿</span>
-          <span className="text-sm font-bold text-white">CivicEchoNZ</span>
+          <span className="text-sm font-bold text-white">Fair Say NZ</span>
         </div>
         <button
           type="button"
@@ -136,7 +136,7 @@ export default function Sidebar({ session }) {
             <div className="flex items-center justify-between border-b border-white/8 px-5 py-4">
               <div className="flex items-center gap-2">
                 <span className="text-xl">🌿</span>
-                <p className="text-sm font-bold text-white">CivicEchoNZ</p>
+                <p className="text-sm font-bold text-white">Fair Say NZ</p>
               </div>
               <button
                 type="button"

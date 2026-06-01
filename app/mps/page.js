@@ -11,7 +11,11 @@ export const metadata = {
 export const revalidate = 600;
 
 async function getData({ q = '', party = '', electorate = '' }) {
-  await dbConnect();
+  try {
+    await dbConnect();
+  } catch {
+    return { mps: [], parties: [], dbError: true };
+  }
 
   const filter = { isActive: true };
 
@@ -38,7 +42,7 @@ async function getData({ q = '', party = '', electorate = '' }) {
     Party.find({ isParliamentary: true }).sort({ name: 1 }).select('name slug').lean(),
   ]);
 
-  return { mps, parties };
+  return { mps, parties, dbError: false };
 }
 
 export default async function MPsPage({ searchParams }) {
@@ -46,17 +50,27 @@ export default async function MPsPage({ searchParams }) {
   const party = searchParams?.party || '';
   const electorate = searchParams?.electorate || '';
 
-  const { mps, parties } = await getData({ q, party, electorate });
+  const { mps, parties, dbError } = await getData({ q, party, electorate });
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <header className="mb-6">
-        <p className="text-xs uppercase tracking-widest text-emerald-400">CivicEchoNZ</p>
+        <p className="text-xs uppercase tracking-widest text-emerald-400">Fair Say NZ</p>
         <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">🏛️ Members of Parliament</h1>
         <p className="mt-2 text-sm text-slate-300">
           Search all MPs by name, party, and electorate. Contact details are provided for civic participation.
         </p>
       </header>
+
+      {dbError && (
+        <div className="mb-6 card rounded-2xl p-6 text-center">
+          <p className="text-2xl mb-2">🔌</p>
+          <p className="font-semibold text-white">Database not connected</p>
+          <p className="mt-1 text-sm text-slate-400">
+            Add a valid <code className="text-emerald-400">MONGODB_URI</code> to your <code className="text-emerald-400">.env.local</code> and run the seed script to load MP data.
+          </p>
+        </div>
+      )}
 
       <form className="card mb-6 grid gap-3 rounded-2xl p-4 sm:grid-cols-4 sm:p-5" method="GET">
         <input

@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import dbConnect from '@/lib/mongodb';
-import MP from '@/lib/models/MP';
-import Party from '@/lib/models/Party';
+import { getDataClient } from '@/lib/supabase/data';
+import STATIC_MPS from '@/lib/staticMps';
 
 export const metadata = {
   title: 'MPs',
@@ -11,38 +10,41 @@ export const metadata = {
 export const revalidate = 600;
 
 async function getData({ q = '', party = '', electorate = '' }) {
-  try {
-    await dbConnect();
-  } catch {
-    return { mps: [], parties: [], dbError: true };
-  }
+  const supabase = getDataClient();
 
-  const filter = { isActive: true };
+  let query = supabase
+    .from('mps')
+    .select('id, full_name, slug, role, electorate, photo_url, bio_summary, party:parties(name, slug, color)')
+    .eq('is_active', true)
+    .order('full_name')
+    .limit(200);
 
   if (q) {
-    const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-    filter.$or = [{ fullName: regex }, { role: regex }, { electorate: regex }];
+    const safe = q.replace(/[%_\\]/g, '\\$&');
+    query = query.or(`full_name.ilike.%${safe}%,role.ilike.%${safe}%,electorate.ilike.%${safe}%`);
   }
 
   if (party) {
-    const partyDoc = await Party.findOne({ slug: party }).select('_id').lean();
-    filter.party = partyDoc?._id || null;
+    const { data: partyRow } = await supabase
+      .from('parties')
+      .select('id')
+      .eq('slug', party)
+      .single();
+    query = query.eq('party_id', partyRow?.id ?? '00000000-0000-0000-0000-000000000000');
   }
 
   if (electorate) {
-    filter.electorate = new RegExp(electorate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    const safe = electorate.replace(/[%_\\]/g, '\\$&');
+    query = query.ilike('electorate', `%${safe}%`);
   }
 
-  const [mps, parties] = await Promise.all([
-    MP.find(filter)
-      .populate('party', 'name slug color')
-      .sort({ fullName: 1 })
-      .limit(200)
-      .lean(),
-    Party.find({ isParliamentary: true }).sort({ name: 1 }).select('name slug').lean(),
+  const [{ data: mps, error }, { data: parties }] = await Promise.all([
+    query,
+    supabase.from('parties').select('id, name, slug').eq('is_parliamentary', true).order('name'),
   ]);
 
-  return { mps, parties, dbError: false };
+  if (error) return { mps: [], parties: [], dbError: true, isStatic: false };
+  return { mps: mps || [], parties: parties || [], dbError: false, isStatic: false };
 }
 
 export default async function MPsPage({ searchParams }) {
@@ -50,7 +52,28 @@ export default async function MPsPage({ searchParams }) {
   const party = searchParams?.party || '';
   const electorate = searchParams?.electorate || '';
 
-  const { mps, parties, dbError } = await getData({ q, party, electorate });
+  let { mps, parties, dbError } = await getData({ q, party, electorate });
+
+  // Fall back to static data when DB is unavailable or empty
+  const isStatic = dbError || mps.length === 0;
+  if (isStatic) {
+    let filtered = STATIC_MPS;
+    if (q) {
+      const lower = q.toLowerCase();
+      filtered = filtered.filter(
+        (m) => m.full_name.toLowerCase().includes(lower) || m.role.toLowerCase().includes(lower) || m.electorate?.toLowerCase().includes(lower),
+      );
+    }
+    if (party) filtered = filtered.filter((m) => m.party.slug === party);
+    if (electorate) filtered = filtered.filter((m) => m.electorate?.toLowerCase().includes(electorate.toLowerCase()));
+    mps = filtered;
+
+    // Build party list from static MPs for the filter dropdown
+    const seen = new Set();
+    parties = STATIC_MPS.map((m) => m.party)
+      .filter((p) => { if (seen.has(p.slug)) return false; seen.add(p.slug); return true; })
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
@@ -62,12 +85,10 @@ export default async function MPsPage({ searchParams }) {
         </p>
       </header>
 
-      {dbError && (
-        <div className="mb-6 card rounded-2xl p-6 text-center">
-          <p className="text-2xl mb-2">🔌</p>
-          <p className="font-semibold text-white">Database not connected</p>
-          <p className="mt-1 text-sm text-slate-400">
-            Add a valid <code className="text-emerald-400">MONGODB_URI</code> to your <code className="text-emerald-400">.env.local</code> and run the seed script to load MP data.
+      {isStatic && (
+        <div className="mb-6 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
+          <p className="text-xs text-blue-200">
+            Showing pre-loaded MP data from the 2023 election. For live data and full profiles, connect a database and run the seed script.
           </p>
         </div>
       )}
@@ -88,7 +109,7 @@ export default async function MPsPage({ searchParams }) {
         >
           <option value="">All parties</option>
           {parties.map((p) => (
-            <option key={p._id.toString()} value={p.slug}>{p.name}</option>
+            <option key={p.slug} value={p.slug}>{p.name}</option>
           ))}
         </select>
 
@@ -109,31 +130,50 @@ export default async function MPsPage({ searchParams }) {
 
       {mps.length === 0 ? (
         <section className="card rounded-2xl p-8 text-center text-slate-300">
-          No MPs matched your filters.
+          {q || party || electorate ? 'No MPs matched your filters.' : 'No MP data available — connect a database and run the seed script.'}
         </section>
       ) : (
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {mps.map((mp) => (
-            <article key={mp._id.toString()} className="card rounded-2xl p-5 hover:border-white/20 transition-colors">
-              <div className="mb-3 flex items-center gap-2">
-                <span
-                  className="h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: mp.party?.color || '#6b7280' }}
-                  aria-hidden="true"
-                />
-                <p className="text-xs text-slate-400">{mp.party?.name || 'Independent / Unknown'}</p>
+            <article key={mp.id} className="card rounded-2xl p-5 hover:border-white/20 transition-colors">
+              <div className="mb-3 flex items-center gap-3">
+                {mp.photo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={mp.photo_url}
+                    alt={mp.full_name}
+                    title="Photo via Wikimedia Commons"
+                    className="h-12 w-12 shrink-0 rounded-full object-cover border border-white/10"
+                  />
+                ) : (
+                  <div className="h-12 w-12 shrink-0 rounded-full bg-slate-700/60 flex items-center justify-center text-slate-300 font-medium">
+                    {mp.full_name?.charAt(0)}
+                  </div>
+                )}
+                <div className="flex items-center gap-2 min-w-0">
+                  <span
+                    className="h-2.5 w-2.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: mp.party?.color || '#6b7280' }}
+                    aria-hidden="true"
+                  />
+                  <p className="text-xs text-slate-400 truncate">{mp.party?.name || 'Independent / Unknown'}</p>
+                </div>
               </div>
 
-              <h2 className="text-lg font-semibold text-white">{mp.fullName}</h2>
+              <h2 className="text-lg font-semibold text-white">{mp.full_name}</h2>
               <p className="mt-1 text-sm text-slate-300">{mp.role || 'MP'}</p>
               <p className="mt-1 text-sm text-slate-400">{mp.electorate || 'List MP'}</p>
+
+              {mp.bio_summary && (
+                <p className="mt-3 text-xs text-slate-400 leading-relaxed line-clamp-2">{mp.bio_summary}</p>
+              )}
 
               <div className="mt-4 flex items-center justify-between">
                 <Link href={`/mps/${mp.slug}`} className="text-sm font-medium text-emerald-400 hover:text-emerald-300">
                   View profile →
                 </Link>
-                {mp.contactEmail ? (
-                  <a href={`mailto:${mp.contactEmail}`} className="text-xs text-slate-400 hover:text-slate-300">
+                {mp.contact_email ? (
+                  <a href={`mailto:${mp.contact_email}`} className="text-xs text-slate-400 hover:text-slate-300">
                     Email
                   </a>
                 ) : null}

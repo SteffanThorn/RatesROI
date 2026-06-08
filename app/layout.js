@@ -10,7 +10,6 @@ export const metadata = {
   description:
     'Fair Say NZ: 100% neutral, NZ-focused civic platform. News, party info, MP contacts, polls and real ways to have your say.',
   keywords: ['New Zealand', 'civics', 'parliament', 'election 2026', 'NZ politics', 'civic education'],
-  themeColor: '#080f1e',
   manifest: '/manifest.json',
   openGraph: {
     title: 'Fair Say NZ',

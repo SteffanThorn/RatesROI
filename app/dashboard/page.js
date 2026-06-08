@@ -1,27 +1,30 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { auth } from '@/auth';
-import AccountSettingsForm from '@/components/AccountSettingsForm';
+import { createClient } from '@/lib/supabase/server';
 import SignOutButton from '@/components/SignOutButton';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
 const CIVIC_LINKS = [
-  { href: '/news', icon: '📰', title: 'Grounded News', desc: 'Latest NZ politics' },
-  { href: '/parties', icon: '🗳️', title: 'Parties', desc: 'Neutral party information' },
+  { href: '/polls', icon: '📊', title: 'Polls', desc: 'Vote & see results' },
   { href: '/mps', icon: '🏛️', title: 'MPs', desc: 'Find & contact your MP' },
+  { href: '/parties', icon: '🗳️', title: 'Parties', desc: 'Neutral party information' },
   { href: '/civics', icon: '📚', title: 'Civics', desc: 'How NZ government works' },
-  { href: '/polls', icon: '📊', title: 'Polls', desc: 'Vote & pairwise rankings' },
-  { href: '/events', icon: '📅', title: 'Civic Events', desc: 'Parliament & council news' },
-  { href: '/newsletter', icon: '✉️', title: 'Newsletter', desc: 'Weekly Objective Truth' },
+  { href: '/news', icon: '📰', title: 'News', desc: 'Latest NZ politics' },
+  { href: '/events', icon: '📅', title: 'Events', desc: 'Parliament & council news' },
 ];
 
 export default async function DashboardPage() {
-  const session = await auth();
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!session?.user) {
-    redirect('/auth/signin');
-  }
+  if (!user) redirect('/auth');
+
+  const { data: account } = await supabase
+    .from('accounts')
+    .select('verification_tag, is_verified, created_at')
+    .eq('account_id', user.id)
+    .maybeSingle();
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
@@ -29,31 +32,36 @@ export default async function DashboardPage() {
         <div>
           <p className="text-xs uppercase tracking-widest text-emerald-400">Fair Say NZ</p>
           <h1 className="mt-1 text-2xl font-bold text-white">My Account</h1>
-          <p className="mt-1 text-sm text-slate-400">{session.user.email}</p>
         </div>
         <SignOutButton />
       </div>
 
       <section className="card mb-6 rounded-2xl p-6">
-        <h2 className="mb-4 font-semibold text-white">Profile</h2>
+        <h2 className="mb-4 font-semibold text-white">Account</h2>
         <div className="grid gap-3 text-sm sm:grid-cols-2">
           <div>
-            <span className="text-slate-400">Name</span>
-            <p className="mt-0.5 font-medium text-white">{session.user.name}</p>
+            <span className="text-slate-400">Account ID</span>
+            <p className="mt-0.5 font-mono text-xs text-slate-300 break-all">{user.id}</p>
           </div>
           <div>
-            <span className="text-slate-400">Role</span>
-            <p className="mt-0.5 font-medium capitalize text-white">{session.user.role}</p>
-          </div>
-          <div>
-            <span className="text-slate-400">Newsletter</span>
+            <span className="text-slate-400">Verification</span>
             <p className="mt-0.5 font-medium text-white">
-              {session.user.newsletterSubscribed ? 'Subscribed' : 'Not subscribed'}
+              {account?.is_verified ? (
+                <span className="text-emerald-300">
+                  Verified · <code className="text-xs">{account.verification_tag}</code>
+                </span>
+              ) : (
+                <span className="text-amber-300">Pending</span>
+              )}
+            </p>
+          </div>
+          <div>
+            <span className="text-slate-400">Member since</span>
+            <p className="mt-0.5 font-medium text-white">
+              {account?.created_at ?? '—'}
             </p>
           </div>
         </div>
-
-        <AccountSettingsForm initialElectorate={session.user.preferredElectorate || ''} />
       </section>
 
       <section>
@@ -72,23 +80,6 @@ export default async function DashboardPage() {
           ))}
         </div>
       </section>
-
-      {session.user.role === 'admin' ? (
-        <section className="card mt-6 rounded-2xl border-amber-500/20 bg-amber-500/5 p-6">
-          <h2 className="mb-3 font-semibold text-amber-300">🛡️ Admin Tools</h2>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/admin" className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500">
-              Admin Dashboard →
-            </Link>
-            <Link href="/admin/events/new" className="rounded-lg border border-amber-500/30 px-4 py-2 text-sm text-amber-200 hover:bg-amber-500/10">
-              Add Event
-            </Link>
-            <Link href="/admin/polls/new" className="rounded-lg border border-amber-500/30 px-4 py-2 text-sm text-amber-200 hover:bg-amber-500/10">
-              Create Poll
-            </Link>
-          </div>
-        </section>
-      ) : null}
     </main>
   );
 }

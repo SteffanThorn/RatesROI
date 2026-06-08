@@ -101,7 +101,7 @@ async function NewsFeed() {
         <p className="text-2xl mb-2">🔌</p>
         <p className="font-semibold text-white">Database not connected</p>
         <p className="mt-1 text-sm text-slate-400">
-          Add a valid <code className="text-emerald-400">MONGODB_URI</code> to your <code className="text-emerald-400">.env.local</code> to enable the news feed.
+          Check your Supabase credentials in <code className="text-emerald-400">.env.local</code> to enable the news feed.
         </p>
       </div>
     );

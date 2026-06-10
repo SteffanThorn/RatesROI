@@ -153,12 +153,14 @@ export default async function MPsPage({ searchParams }) {
                 )}
                 <div className="flex items-center gap-2 min-w-0">
                   {PARTY_LOGO_BY_SLUG[mp.party?.slug] ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={PARTY_LOGO_BY_SLUG[mp.party.slug]}
-                      alt={mp.party.name}
-                      className="h-5 w-auto max-w-16 shrink-0 object-contain"
-                    />
+                    <div className="shrink-0 rounded px-1.5 py-0.5 flex items-center" style={{ background: 'rgba(255,255,255,0.95)' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={PARTY_LOGO_BY_SLUG[mp.party.slug]}
+                        alt={mp.party.name}
+                        className="h-4 w-auto max-w-16 object-contain"
+                      />
+                    </div>
                   ) : (
                     <span
                       className="h-2.5 w-2.5 shrink-0 rounded-full"

@@ -162,7 +162,7 @@ export default async function MPsPage({ searchParams }) {
                   {PARTY_LOGO_BY_SLUG[mp.party?.slug] ? (
                     <div
                       className="shrink-0 flex items-center"
-                      style={['nzfirst', 'maori', 'te-pati-maori'].includes(mp.party.slug)
+                      style={['maori', 'te-pati-maori'].includes(mp.party.slug)
                         ? { background: 'rgba(255,255,255,0.95)', borderRadius: '4px', padding: '2px 6px' }
                         : undefined}
                     >
@@ -171,6 +171,7 @@ export default async function MPsPage({ searchParams }) {
                         src={PARTY_LOGO_BY_SLUG[mp.party.slug]}
                         alt={mp.party.name}
                         className="h-5 w-auto max-w-16 object-contain"
+                        style={mp.party.slug === 'nzfirst' ? { filter: 'brightness(0) invert(1)' } : undefined}
                       />
                     </div>
                   ) : (

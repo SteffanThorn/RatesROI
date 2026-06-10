@@ -74,20 +74,29 @@ function BiasPill({ bias }) {
 
 function ArticleCard({ article }) {
   const validityCfg = VALIDITY_CONFIG[article.sourceValidity] || null;
+  const biasCfg = BIAS_POS[article.sourceBias];
 
   return (
-    <article className="card rounded-2xl overflow-hidden flex flex-col sm:flex-row hover:border-white/20 transition-colors gap-0">
-      {article.image_url && (
-        <div className="sm:w-32 sm:shrink-0 h-36 sm:h-auto overflow-hidden bg-slate-800">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+    <article className="card rounded-2xl overflow-hidden flex flex-col hover:border-white/20 transition-colors">
+      {/* Image — always reserve space for visual consistency */}
+      <div className="h-44 shrink-0 overflow-hidden bg-slate-800/60">
+        {article.image_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={article.image_url}
             alt=""
             className="h-full w-full object-cover opacity-90"
             loading="lazy"
           />
-        </div>
-      )}
+        ) : (
+          <div
+            className="h-full w-full flex items-center justify-center text-4xl opacity-20"
+            style={biasCfg ? { background: `linear-gradient(135deg, ${biasCfg.color}18 0%, transparent 100%)` } : undefined}
+          >
+            📰
+          </div>
+        )}
+      </div>
 
       <div className="flex flex-col flex-1 p-4">
         {/* Source meta row */}
@@ -112,7 +121,7 @@ function ArticleCard({ article }) {
         </h2>
 
         {article.summary && (
-          <p className="text-xs text-slate-400 leading-relaxed flex-1 line-clamp-4">
+          <p className="text-xs text-slate-400 leading-relaxed flex-1 line-clamp-3">
             {article.summary}
           </p>
         )}
@@ -121,7 +130,7 @@ function ArticleCard({ article }) {
           href={article.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-2.5 text-xs font-medium text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1"
+          className="mt-3 text-xs font-medium text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1"
         >
           Read full article →
         </a>
@@ -338,7 +347,7 @@ export default function NewsSourcesSection({ articles = [], sources = [] }) {
       ) : filtered.length === 0 ? (
         <p className="text-sm text-slate-400 py-8 text-center">No articles match the selected filters.</p>
       ) : (
-        <div className="space-y-3">
+        <div className="grid gap-4 sm:grid-cols-2">
           {filtered.map((a) => (
             <ArticleCard key={a.url} article={a} />
           ))}

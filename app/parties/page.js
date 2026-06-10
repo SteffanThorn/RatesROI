@@ -15,7 +15,7 @@ const STATIC_PARTIES = [
     name: 'National Party',
     shortName: 'NAT',
     color: '#1a56a4',
-    logo_url: 'https://elections.nz/assets/Party-logos/Low-Resolution-300px.jpg',
+    logo_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/New_Zealand_National_Party_logo.png/250px-New_Zealand_National_Party_logo.png',
     current_seats: 49,
     spectrum: 'Centre-right',
     current_leader: 'Christopher Luxon',
@@ -34,7 +34,7 @@ const STATIC_PARTIES = [
     name: 'Labour Party',
     shortName: 'LAB',
     color: '#cc0000',
-    logo_url: 'https://elections.nz/assets/Party-logos/labour-party-logo-june-2016.jpg',
+    logo_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/New_Zealand_Labour_Party_logo.svg/250px-New_Zealand_Labour_Party_logo.svg.png',
     current_seats: 34,
     spectrum: 'Centre-left',
     current_leader: 'Chris Hipkins',
@@ -53,7 +53,7 @@ const STATIC_PARTIES = [
     name: 'ACT Party',
     shortName: 'ACT',
     color: '#d4a017',
-    logo_url: 'https://elections.nz/assets/Party-logos/the-act-party-logo-august-2019__ScaleWidthWzMwMF0.jpg',
+    logo_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Logo_of_the_ACT_New_Zealand.svg/250px-Logo_of_the_ACT_New_Zealand.svg.png',
     current_seats: 11,
     spectrum: 'Right-libertarian',
     current_leader: 'David Seymour',
@@ -72,7 +72,7 @@ const STATIC_PARTIES = [
     name: 'Green Party',
     shortName: 'GRN',
     color: '#098137',
-    logo_url: 'https://elections.nz/assets/Party-logos/green-party-logo-june-2017.jpg',
+    logo_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Green_Party_of_Aotearoa_New_Zealand_logo.svg/250px-Green_Party_of_Aotearoa_New_Zealand_logo.svg.png',
     current_seats: 15,
     spectrum: 'Left / Green',
     current_leader: 'Chlöe Swarbrick & Marama Davidson',
@@ -91,7 +91,7 @@ const STATIC_PARTIES = [
     name: 'NZ First',
     shortName: 'NZF',
     color: '#4b5563',
-    logo_url: 'https://elections.nz/assets/Party-logos/nz-first-logo-june-2017.jpg',
+    logo_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/NZ_First_logo_2017.png/250px-NZ_First_logo_2017.png',
     current_seats: 8,
     spectrum: 'Populist / Centre',
     current_leader: 'Winston Peters',
@@ -110,7 +110,7 @@ const STATIC_PARTIES = [
     name: 'Te Pāti Māori',
     shortName: 'TPM',
     color: '#b5281e',
-    logo_url: 'https://elections.nz/assets/Party-logos/Maori-part-logo-Final_Maaeori-full-colour-002__ScaleWidthWzMwMF0.jpg',
+    logo_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e8/Te_P%C4%81ti_M%C4%81ori_logo.svg/250px-Te_P%C4%81ti_M%C4%81ori_logo.svg.png',
     current_seats: 11,
     spectrum: 'Māori nationalist / Left',
     current_leader: 'Debbie Ngarewa-Packer & Rawiri Waititi',
@@ -129,7 +129,7 @@ const STATIC_PARTIES = [
     name: 'Mana Movement',
     shortName: 'MANA',
     color: '#7c3aed',
-    logo_url: null,
+    logo_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/80/New_Zealand_Mana_Party_logo.png/250px-New_Zealand_Mana_Party_logo.png',
     current_seats: 0,
     spectrum: 'Māori nationalist / Far-left',
     current_leader: 'Hone Harawira',
@@ -148,7 +148,7 @@ const STATIC_PARTIES = [
     name: 'The Opportunity Party',
     shortName: 'OPP',
     color: '#0891b2',
-    logo_url: 'https://elections.nz/assets/Party-logos/Opportunity_Logo_Colour_RGB-v2__ScaleWidthWzMwMF0.jpg',
+    logo_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/The_Opportunity_Party_logo_2025.svg/250px-The_Opportunity_Party_logo_2025.svg.png',
     current_seats: 0,
     spectrum: 'Centre / Progressive',
     current_leader: 'Qiulae (Q) Wong',
@@ -167,7 +167,7 @@ const STATIC_PARTIES = [
     name: 'New Conservative',
     shortName: 'NC',
     color: '#4f46e5',
-    logo_url: null,
+    logo_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7e/Conservative_Party_NZ_logo.jpg/250px-Conservative_Party_NZ_logo.jpg',
     current_seats: 0,
     spectrum: 'Right / Social conservative',
     current_leader: 'Elliot Ikilei',
@@ -186,7 +186,7 @@ const STATIC_PARTIES = [
     name: 'Aotearoa Legalise Cannabis Party',
     shortName: 'ALCP',
     color: '#15803d',
-    logo_url: null,
+    logo_url: 'https://upload.wikimedia.org/wikipedia/en/d/da/AotearoaLegaliseCannabisPartyLogo.png',
     current_seats: 0,
     spectrum: 'Progressive / Single-issue',
     current_leader: 'Abe Gray',
@@ -205,7 +205,7 @@ const STATIC_PARTIES = [
     name: 'Democracy NZ',
     shortName: 'DNZ',
     color: '#0369a1',
-    logo_url: null,
+    logo_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/DemocracyNZ_logo.png/250px-DemocracyNZ_logo.png',
     current_seats: 0,
     spectrum: 'Right-populist',
     current_leader: 'Matt King',
@@ -524,8 +524,12 @@ export default async function PartiesPage() {
 
   let allParties;
   if (dbParties.length > 0) {
-    // Enrich DB rows with static electorate context
-    const enriched = dbParties.map(p => ({ ...STATIC_CONTEXT_BY_SLUG[p.slug], ...p }));
+    // Enrich DB rows with static electorate context; prefer static logo if DB has none
+    const enriched = dbParties.map(p => ({
+      ...STATIC_CONTEXT_BY_SLUG[p.slug],
+      ...p,
+      logo_url: p.logo_url || STATIC_CONTEXT_BY_SLUG[p.slug]?.logo_url,
+    }));
     // Append any static-only parties not yet in the DB (e.g. Mana)
     const dbSlugs = new Set(dbParties.map(p => p.slug));
     const staticOnly = STATIC_PARTIES.filter(p => !dbSlugs.has(p.slug));

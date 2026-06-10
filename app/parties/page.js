@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getDataClient } from '@/lib/supabase/data';
+import { PARTY_LOGO_BY_SLUG } from '@/lib/partyLogos';
 
 export const metadata = {
   title: 'Parties',

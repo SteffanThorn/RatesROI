@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getDataClient } from '@/lib/supabase/data';
 import STATIC_MPS from '@/lib/staticMps';
+import { PARTY_LOGO_BY_SLUG } from '@/lib/partyLogos';
 
 export const metadata = {
   title: 'MPs',
@@ -151,11 +152,20 @@ export default async function MPsPage({ searchParams }) {
                   </div>
                 )}
                 <div className="flex items-center gap-2 min-w-0">
-                  <span
-                    className="h-2.5 w-2.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: mp.party?.color || '#6b7280' }}
-                    aria-hidden="true"
-                  />
+                  {PARTY_LOGO_BY_SLUG[mp.party?.slug] ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={PARTY_LOGO_BY_SLUG[mp.party.slug]}
+                      alt={mp.party.name}
+                      className="h-5 w-auto max-w-16 shrink-0 object-contain"
+                    />
+                  ) : (
+                    <span
+                      className="h-2.5 w-2.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: mp.party?.color || '#6b7280' }}
+                      aria-hidden="true"
+                    />
+                  )}
                   <p className="text-xs text-slate-400 truncate">{mp.party?.name || 'Independent / Unknown'}</p>
                 </div>
               </div>

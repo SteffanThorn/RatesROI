@@ -165,7 +165,7 @@ export default async function MPsPage({ searchParams }) {
                       src={PARTY_LOGO_BY_SLUG[mp.party.slug]}
                       alt={mp.party.name}
                       className="h-5 w-auto max-w-16 shrink-0 object-contain"
-                      style={mp.party.slug === 'nzfirst' ? { filter: 'brightness(0) invert(1)' } : undefined}
+                      style={['nzfirst', 'maori', 'te-pati-maori'].includes(mp.party.slug) ? { filter: 'brightness(0) invert(1)' } : undefined}
                     />
                   ) : (
                     <span

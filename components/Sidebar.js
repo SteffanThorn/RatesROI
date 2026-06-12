@@ -5,14 +5,15 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 const NAV_LINKS = [
-  { href: '/',           label: 'Home',       icon: '🏠' },
-  { href: '/news',       label: 'Grounded News', icon: '📰' },
-  { href: '/parties',   label: 'Parties',     icon: '🗳️'  },
-  { href: '/mps',        label: 'MPs',         icon: '🏛️' },
-  { href: '/civics',     label: 'Civics',      icon: '📚' },
-  { href: '/polls',      label: 'Polls',       icon: '📊' },
-  { href: '/events',     label: 'Events',      icon: '📅' },
-  { href: '/newsletter', label: 'Newsletter',  icon: '✉️'  },
+  { href: '/',             label: 'Home',         icon: '🏠' },
+  { href: '/news',         label: 'Grounded News', icon: '📰' },
+  { href: '/parties',      label: 'Parties',      icon: '🗳️'  },
+  { href: '/mps',          label: 'MPs',           icon: '🏛️' },
+  { href: '/civics',       label: 'Civics',        icon: '📚' },
+  { href: '/polls',        label: 'Polls',         icon: '📊' },
+  { href: '/communities',  label: 'Communities',   icon: '👥' },
+  { href: '/events',       label: 'Events',        icon: '📅' },
+  { href: '/newsletter',   label: 'Newsletter',    icon: '✉️'  },
 ];
 
 function NavLink({ href, label, icon, onClick }) {

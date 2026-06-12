@@ -58,12 +58,13 @@ async function LatestNews() {
 }
 
 const QUICK_LINKS = [
-  { href: '/parties',    icon: '🗳️',  title: 'Parties',     desc: 'Neutral party comparisons' },
-  { href: '/mps',        icon: '🏛️', title: 'MPs',          desc: 'Find & contact your MP'    },
-  { href: '/civics',     icon: '📚',  title: 'Civics',       desc: 'How NZ government works'   },
-  { href: '/polls',      icon: '📊',  title: 'Polls',        desc: 'Have your anonymous say'   },
-  { href: '/events',     icon: '📅',  title: 'Events',       desc: 'Parliament & council news' },
-  { href: '/newsletter', icon: '✉️',  title: 'Newsletter',   desc: 'Weekly "Objective Truth"'  },
+  { href: '/parties',      icon: '🗳️',  title: 'Parties',      desc: 'Neutral party comparisons'     },
+  { href: '/mps',          icon: '🏛️', title: 'MPs',           desc: 'Find & contact your MP'        },
+  { href: '/civics',       icon: '📚',  title: 'Civics',        desc: 'How NZ government works'       },
+  { href: '/polls',        icon: '📊',  title: 'Polls',         desc: 'Have your anonymous say'       },
+  { href: '/communities',  icon: '👥',  title: 'Communities',   desc: 'Find groups across the spectrum' },
+  { href: '/events',       icon: '📅',  title: 'Events',        desc: 'Parliament & council news'     },
+  { href: '/newsletter',   icon: '✉️',  title: 'Newsletter',    desc: 'Weekly "Objective Truth"'      },
 ];
 
 export default function HomePage() {

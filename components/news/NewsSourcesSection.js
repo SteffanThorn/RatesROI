@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const BIAS_POS = {
   'left':           { pct: 8,  color: '#3b82f6' },
@@ -73,18 +73,30 @@ function BiasPill({ bias }) {
 }
 
 function ArticleCard({ article }) {
+  const [imgSrc, setImgSrc]     = useState(article.image_url || null);
   const [imgFailed, setImgFailed] = useState(false);
   const validityCfg = VALIDITY_CONFIG[article.sourceValidity] || null;
   const biasCfg = BIAS_POS[article.sourceBias];
+
+  // If no image came from the DB, fetch the og:image client-side
+  useEffect(() => {
+    if (imgSrc || imgFailed) return;
+    let cancelled = false;
+    fetch(`/api/og-image?url=${encodeURIComponent(article.url)}`)
+      .then(r => r.json())
+      .then(({ image }) => { if (!cancelled && image) setImgSrc(image); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [article.url, imgSrc, imgFailed]);
 
   return (
     <article className="card rounded-2xl overflow-hidden flex flex-col hover:border-white/20 transition-colors">
       {/* Image — always reserve space for visual consistency */}
       <div className="h-44 shrink-0 overflow-hidden bg-slate-800/60">
-        {article.image_url && !imgFailed ? (
+        {imgSrc && !imgFailed ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={article.image_url}
+            src={imgSrc}
             alt=""
             className="h-full w-full object-cover opacity-90"
             loading="lazy"

@@ -1,6 +1,7 @@
 import './globals.css';
 import { auth } from '@/auth';
 import Sidebar from '@/components/Sidebar';
+import SuggestEditButton from '@/components/SuggestEditButton';
 
 export const metadata = {
   title: {
@@ -35,6 +36,7 @@ export default async function RootLayout({ children }) {
         <div className="page-content min-h-screen">
           {children}
         </div>
+        <SuggestEditButton />
       </body>
     </html>
   );

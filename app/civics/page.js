@@ -160,6 +160,82 @@ function MMPDiagram() {
   );
 }
 
+/* ── Diagram: Parliament Hemicycle ───────────────────────────────────────── */
+function ParliamentHemicycle() {
+  // Ordered left → right across the chamber
+  const parties = [
+    { name: 'Te Pāti Māori', short: 'TPM', color: '#b5281e', seats: 6  },
+    { name: 'Green Party',   short: 'GRN', color: '#098137', seats: 15 },
+    { name: 'Labour',        short: 'LAB', color: '#cc0000', seats: 34 },
+    { name: 'NZ First',      short: 'NZF', color: '#4b5563', seats: 8  },
+    { name: 'National',      short: 'NAT', color: '#1a56a4', seats: 49 },
+    { name: 'ACT',           short: 'ACT', color: '#d4a017', seats: 11 },
+  ];
+
+  const total = parties.reduce((s, p) => s + p.seats, 0); // 123
+
+  // Flat list of colours in left→right order
+  const seatColors = parties.flatMap(p => Array(p.seats).fill(p.color));
+
+  // 5 concentric rows — innermost to outermost, totalling 123
+  const rows = [
+    { n: 17, r: 98  },
+    { n: 21, r: 130 },
+    { n: 25, r: 162 },
+    { n: 29, r: 194 },
+    { n: 31, r: 226 },
+  ];
+
+  const cx = 250, cy = 268;
+  const dots = [];
+  let idx = 0;
+
+  for (const { n, r } of rows) {
+    for (let i = 0; i < n && idx < seatColors.length; i++, idx++) {
+      // angle goes from π (left) → 0 (right) through π/2 (top)
+      const angle = Math.PI - (i / (n - 1)) * Math.PI;
+      dots.push({
+        x: +(cx + r * Math.cos(angle)).toFixed(1),
+        y: +(cy - r * Math.sin(angle)).toFixed(1),
+        color: seatColors[idx],
+      });
+    }
+  }
+
+  return (
+    <div className="mb-6 rounded-2xl p-5" style={{ background: 'rgba(8,15,30,0.88)', border: '1px solid rgba(255,255,255,0.07)' }}>
+      <p className="text-xs uppercase tracking-widest text-emerald-400 mb-0.5">Current House composition</p>
+      <p className="text-xs text-slate-500 mb-3">2023 election result · seats arranged left → right across the chamber</p>
+
+      <svg viewBox="0 0 500 285" className="w-full" aria-label="NZ Parliament hemicycle — 2023 seat distribution by party">
+        {/* Faint background arc */}
+        <path
+          d={`M ${cx - 242} ${cy} A 242 242 0 0 1 ${cx + 242} ${cy}`}
+          fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1.5"
+        />
+        {/* Seat dots */}
+        {dots.map((d, i) => (
+          <circle key={i} cx={d.x} cy={d.y} r="6.5" fill={d.color} opacity="0.92" />
+        ))}
+        {/* Centre count */}
+        <text x={cx} y={cy - 18} textAnchor="middle" fill="white" fontSize="30" fontWeight="800">{total}</text>
+        <text x={cx} y={cy - 2}  textAnchor="middle" fill="#475569" fontSize="10" letterSpacing="1">SEATS</text>
+      </svg>
+
+      {/* Legend */}
+      <div className="flex flex-wrap gap-x-5 gap-y-2 justify-center mt-1">
+        {parties.map(p => (
+          <div key={p.short} className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: p.color }} />
+            <span className="text-xs font-medium text-slate-300">{p.short}</span>
+            <span className="text-xs text-slate-500">{p.seats}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Diagram: Law Making Pipeline ────────────────────────────────────────── */
 const LAW_STEPS = [
   {
@@ -435,6 +511,7 @@ export default function CivicsPage() {
             Mixed-Member Proportional (MMP) is NZ's voting system since 1996. It gives every voter two votes: one for a local MP, one for a party. The party vote determines how Parliament is composed.
           </p>
           <MMPDiagram />
+          <ParliamentHemicycle />
           <div className="grid gap-4 sm:grid-cols-2">
             {[
               {

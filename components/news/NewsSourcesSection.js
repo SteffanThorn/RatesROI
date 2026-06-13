@@ -73,6 +73,7 @@ function BiasPill({ bias }) {
 }
 
 function ArticleCard({ article }) {
+  const [imgFailed, setImgFailed] = useState(false);
   const validityCfg = VALIDITY_CONFIG[article.sourceValidity] || null;
   const biasCfg = BIAS_POS[article.sourceBias];
 
@@ -80,13 +81,14 @@ function ArticleCard({ article }) {
     <article className="card rounded-2xl overflow-hidden flex flex-col hover:border-white/20 transition-colors">
       {/* Image — always reserve space for visual consistency */}
       <div className="h-44 shrink-0 overflow-hidden bg-slate-800/60">
-        {article.image_url ? (
+        {article.image_url && !imgFailed ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={article.image_url}
             alt=""
             className="h-full w-full object-cover opacity-90"
             loading="lazy"
+            onError={() => setImgFailed(true)}
           />
         ) : (
           <div

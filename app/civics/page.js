@@ -187,20 +187,24 @@ function ParliamentHemicycle() {
   ];
 
   const cx = 250, cy = 268;
-  const dots = [];
-  let idx = 0;
 
+  // Generate every dot position across all rows
+  const allDots = [];
   for (const { n, r } of rows) {
-    for (let i = 0; i < n && idx < seatColors.length; i++, idx++) {
-      // angle goes from π (left) → 0 (right) through π/2 (top)
+    for (let i = 0; i < n; i++) {
       const angle = Math.PI - (i / (n - 1)) * Math.PI;
-      dots.push({
+      allDots.push({
         x: +(cx + r * Math.cos(angle)).toFixed(1),
         y: +(cy - r * Math.sin(angle)).toFixed(1),
-        color: seatColors[idx],
+        angle,
       });
     }
   }
+
+  // Sort by angle descending (π = far left → 0 = far right) so each party
+  // occupies a contiguous vertical wedge rather than diagonal stripes
+  allDots.sort((a, b) => b.angle - a.angle);
+  const dots = allDots.map((d, i) => ({ ...d, color: seatColors[i] }));
 
   return (
     <div className="mb-6 rounded-2xl p-5" style={{ background: 'rgba(8,15,30,0.88)', border: '1px solid rgba(255,255,255,0.07)' }}>
